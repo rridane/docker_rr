@@ -26,9 +26,14 @@ ip link set veth-sat netns <nscon2>
 ip netns <con1> ip addr add 10.10.10.1/24 dev veth-fw
 ip netns <con2> ip addr add 10.10.10.2/24 dev veth-sat
 
+# Passer les interfaces de up à down
+
+ip netns <con1> ip link set veth-fw up
+ip netns <con2> ip link set veth-sat up
+
 # Ajout de la route par défaut dans le satellite
 
-ip netns exec <con2> ip route add default 10.10.10.1
+ip netns exec <con2> ip route add default via 10.10.10.1
 
 # Création du nat entre le satellite et firewall
 
