@@ -1,7 +1,6 @@
-version: '3.9'
+#version: "3.9"
 
 services:
-
   firewall:
     image: ianneub/network-tools
     cap_add:
@@ -12,7 +11,6 @@ services:
     networks:
       local_net:
         ipv4_address: 192.168.1.106
-      private_net: {}
     tty: true
     dns:
       - 8.8.8.8
@@ -26,12 +24,32 @@ services:
     tty: true
     network_mode: "none"
 
+  http_server_ftp_server:
+    image: nginx:latest
+    cap_add:
+      - ALL
+    hostname: nginx
+    tty: true
+    networks:
+      local_net:
+        ipv4_address: 192.168.1.107
+
 networks:
   local_net:
     ipam:
       driver: default
       config:
         - subnet: 192.168.1.0/24
+          gateway: 192.168.1.1
   private_net:
     external: false
     name: none 
+
+  postgres:
+    image: postgres:14.1
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+
